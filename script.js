@@ -6,35 +6,31 @@ const newQuoteBtn = document.getElementById("new-quote");
 
 // get quote from api
 async function getQuote() {
-  const proxyUrl = "http://api.allorigins.win/get?url=";
+  const proxyUrl = "https://glacial-ridge-78146.herokuapp.com/";
   const apiUrl =
     "http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
   try {
-    const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+    const response = await fetch(proxyUrl + apiUrl);
     const data = await response.json();
-    const quoteObj = JSON.parse(data.contents);
-
-    // if author is blank, add unknown
-    if (quoteObj.quoteAuthor === "") {
+    if (data.quoteAuthor === "") {
       authorText.innerText = "Unknown";
     } else {
-      authorText.innerText = quoteObj.quoteAuthor;
+      authorText.innerText = data.quoteAuthor;
     }
-
-    // reduce font size for long quotes
-    if (quoteObj.quoteText.length > 50) {
+    // Reduce Font Size for Longer Quotes
+    if (data.quoteText.length > 120) {
       quoteText.classList.add("long-quote");
     } else {
       quoteText.classList.remove("long-quote");
     }
-
-    quoteText.innerText = quoteObj.quoteText;
-    console.log(quoteObj);
+    quoteText.innerText = data.quoteText;
+    // Stop Loader, Show Quote
+    // removeLoadingSpinner();
   } catch (error) {
-    // getQuote();
-    console.log("whoops, no quote", error);
+    getQuote();
+    console.log("whoops,no quote", error);
   }
 }
 
 // On Load
-getQuote();
+// getQuote();
